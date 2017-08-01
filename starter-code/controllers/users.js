@@ -20,16 +20,33 @@ function postSignup(request, response, next) {
 }
 
 // GET /login
-function getLogin(request, response) {}
+function getLogin(request, response) {
+  response.render('login.ejs', {
+    message: request.flash('loginMessage')
+  });
+}
 
 // POST /login
-function postLogin(request, response) {}
+function postLogin(request, response, next) {
+  var loginProperty = passport.authenticate('local-login', {
+    successRedirect: '/',
+    failureRedirect: '/login',
+    failureFlash: true
+  });
+
+  return loginProperty(request, response, next);
+}
 
 // GET /logout
-function getLogout(request, response) {}
+function getLogout(request, response) {
+  request.logout();
+  response.redirect('/');
+}
 
 // Restricted page
-function secret(request, response) {}
+function secret(request, response) {
+  response.render('secret.ejs');
+}
 
 module.exports = {
   getLogin: getLogin,
